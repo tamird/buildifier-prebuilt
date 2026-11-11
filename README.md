@@ -38,6 +38,13 @@ bazel run -- @buildifier_prebuilt//:buildozer ARGS
 bazel run -- @buildifier_prebuilt//:buildifier ARGS
 ```
 
+A Starlark rule can use Buildifier directly in an action. Set
+`BUILDIFIER = "@buildifier_prebuilt//buildifier:toolchain"` and declare
+`toolchains = [BUILDIFIER]` on the rule. Pass `toolchain = BUILDIFIER` and
+`executable = ctx.toolchains[BUILDIFIER].tool` to `ctx.actions.run` to run
+the binary for the action's execution platform. For Buildozer, use
+`"@buildifier_prebuilt//buildozer:toolchain"`.
+
 ## Installation
 
 Check [the releases](releases) page for the latest snippet.

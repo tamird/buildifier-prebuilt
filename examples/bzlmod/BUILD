@@ -1,6 +1,7 @@
 load("@buildifier_prebuilt//:rules.bzl", "buildifier", "buildifier_test")
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load(":native.bzl", "native_buildifier_test")
 
 buildifier(
     name = "buildifier.check",
@@ -33,5 +34,14 @@ sh_test(
     ],
     deps = [
         "@bazel_tools//tools/bash/runfiles",
+    ],
+)
+
+native_buildifier_test(
+    name = "native_buildifier_test",
+    srcs = ["BUILD"],
+    args = [
+        "-mode=check",
+        "BUILD",
     ],
 )
