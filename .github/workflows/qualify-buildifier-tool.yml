@@ -1,0 +1,24 @@
+name: Buildifier execution platform
+on:
+  push:
+    branches: [qualification/buildifier-mixed-exec]
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Compare both PR revisions on Bazel 7, 8 and 9
+        run: |
+          cp -R tests/exec_platform_probe "$RUNNER_TEMP/probe"
+          python3 "$RUNNER_TEMP/probe/qualify.py"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: buildifier-platform-results
+          path: ${{ runner.temp }}/buildifier-results
