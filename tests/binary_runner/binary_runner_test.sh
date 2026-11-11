@@ -4,6 +4,7 @@ set -euo pipefail
 
 buildifier=$(realpath "$1")
 buildozer=$(realpath "$2")
+native_buildifier=$(realpath "$3")
 workspace="${TEST_TMPDIR}/workspace"
 working_directory="${workspace}/pkg"
 decoy="${TEST_TMPDIR}/decoy"
@@ -33,7 +34,7 @@ EOF
 # A workspace marker here makes a raw buildtools binary treat this directory as
 # the workspace root. The runner must instead use the Bazel working-directory
 # environment variables.
-touch "${decoy}/MODULE.bazel"
+touch "${decoy}/MODULE.bazel" "${decoy}/action_only.bzl"
 cd "$decoy"
 
 case "$(uname -s)" in
@@ -47,6 +48,9 @@ CYGWIN* | MINGW32* | MSYS* | MINGW*)
   ;;
 esac
 export BUILD_WORKING_DIRECTORY BUILD_WORKSPACE_DIRECTORY
+
+# The unwrapped CLI uses the current directory even when run from Bazel.
+PATH= "$native_buildifier" -mode=check action_only.bzl
 
 # BUILD_WORKING_DIRECTORY takes precedence over BUILD_WORKSPACE_DIRECTORY.
 "$buildifier" -mode=check working_only.bzl

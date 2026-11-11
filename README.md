@@ -38,6 +38,21 @@ bazel run -- @buildifier_prebuilt//:buildozer ARGS
 bazel run -- @buildifier_prebuilt//:buildifier ARGS
 ```
 
+To use Buildifier in a build action, declare the Buildifier toolchain in
+your rule's `toolchains`:
+
+```starlark
+BUILDIFIER = "@buildifier_prebuilt//buildifier:toolchain"
+```
+
+Pass `executable = ctx.toolchains[BUILDIFIER].tool` and
+`toolchain = BUILDIFIER` to `ctx.actions.run`. Bazel selects the
+formatter for the worker that runs the action.
+
+For a program launched by `bazel run`, add
+`@buildifier_prebuilt//buildifier:cli_binary` to its runfiles to use the
+CLI's executable without starting a shell or changing directories.
+
 ## Installation
 
 Check [the releases](releases) page for the latest snippet.

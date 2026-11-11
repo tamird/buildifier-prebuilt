@@ -6,9 +6,11 @@ sh_test(
     args = [
         "$(location //:buildifier)",
         "$(location //:buildozer)",
+        "$(location //buildifier:cli_binary)",
     ],
     data = [
         "//:buildifier",
         "//:buildozer",
+        "//buildifier:cli_binary",
     ],
 )

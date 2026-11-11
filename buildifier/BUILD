@@ -20,6 +20,14 @@ buildifier_binary(
     visibility = ["//visibility:public"],
 )
 
+# The CLI selects this executable for programs launched by bazel run.
+filegroup(
+    name = "cli_binary",
+    srcs = [":buildifier"],
+    output_group = "native_binary",
+    visibility = ["//visibility:public"],
+)
+
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),

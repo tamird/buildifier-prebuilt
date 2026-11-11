@@ -27,6 +27,7 @@ def _buildifier_binary(ctx):
             runfiles = ctx.runfiles(files = [buildifier]),
             executable = script,
         ),
+        OutputGroupInfo(native_binary = depset([buildifier])),
     ]
 
 buildifier_binary = rule(
